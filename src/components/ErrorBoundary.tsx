@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h1>
             <p className="text-sm text-zinc-600 mb-6">
-              We hit an unexpected issue loading your session. Please reload the page to continue browsing Thalawakale Electrical and Hardware.
+              We hit an unexpected issue loading your session. Please reload the page to continue browsing Thalawakale Electrical &amp; Hardware.
             </p>
             <button
               type="button"

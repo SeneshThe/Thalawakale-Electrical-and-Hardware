@@ -15,7 +15,7 @@ export function Footer({ onSelectCategory, onNavigateSection }: FooterProps) {
           <div className="md:col-span-5">
             <div className="flex items-center gap-2.5 text-white font-display font-extrabold text-lg sm:text-xl tracking-tight mb-3">
               <BrandLogo variant="dark" size="md" />
-              <span>Thalawakale Electrical and Hardware</span>
+              <span>Thalawakale Electrical &amp; Hardware</span>
             </div>
             <div className="text-xs text-zinc-400 space-y-1 font-mono">
               <p>No. 42, Main Street, Thalawakale 22100</p>
@@ -79,7 +79,7 @@ export function Footer({ onSelectCategory, onNavigateSection }: FooterProps) {
         </div>
 
         <div className="mt-8 pt-5 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-          <p>© 2026 Thalawakale Electrical and Hardware</p>
+          <p>© 2026 Thalawakale Electrical &amp; Hardware</p>
           <p className="font-mono">LankaQR · Visa / Mastercard · COD · Counter Pickup</p>
         </div>
       </div>
