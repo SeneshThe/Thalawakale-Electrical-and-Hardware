@@ -1,0 +1,283 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Customer or electrical contractor profile and default delivery preferences for Thalawakale Electrical and Hardware.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "accountType": {
+          "type": "string",
+          "enum": ["retail", "contractor"]
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "companyName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "accountType", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "SavedOrder": {
+      "title": "SavedOrder",
+      "description": "Confirmed retail or contractor hardware order placed by an authenticated user.",
+      "type": "object",
+      "properties": {
+        "orderNumber": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^TEH-[A-Z0-9\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "placedAt": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 40
+        },
+        "status": {
+          "type": "string",
+          "enum": ["confirmed", "preparing", "dispatched", "collected"]
+        },
+        "customerName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "customerEmail": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "customerPhone": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 30
+        },
+        "deliveryAddress": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 200
+        },
+        "postalCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 20
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["card", "net30", "cod", "pickup"]
+        },
+        "items": {
+          "type": "array",
+          "description": "Bounded list of up to 50 purchased line items."
+        },
+        "subtotal": {
+          "type": "number"
+        },
+        "shipping": {
+          "type": "number"
+        },
+        "vatIncluded": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "orderNumber",
+        "userId",
+        "placedAt",
+        "status",
+        "customerName",
+        "customerEmail",
+        "customerPhone",
+        "deliveryAddress",
+        "postalCode",
+        "paymentMethod",
+        "items",
+        "subtotal",
+        "shipping",
+        "vatIncluded",
+        "total",
+        "createdAt"
+      ]
+    },
+    "SavedQuote": {
+      "title": "SavedQuote",
+      "description": "Formal contractor price quote with volume discounts saved to a user account.",
+      "type": "object",
+      "properties": {
+        "quoteNumber": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^TEH-Q[0-9\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdDate": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 20
+        },
+        "validUntil": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 20
+        },
+        "companyName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "contactName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "projectName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "deliveryPostalCode": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 20
+        },
+        "deliveryWindow": {
+          "type": "string",
+          "enum": ["standard", "expedited", "scheduled", "pickup"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "items": {
+          "type": "array",
+          "description": "Bounded list of up to 50 quoted BOM line items."
+        },
+        "listSubtotal": {
+          "type": "number"
+        },
+        "discountRate": {
+          "type": "number"
+        },
+        "discountLabel": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "discountAmount": {
+          "type": "number"
+        },
+        "netSubtotal": {
+          "type": "number"
+        },
+        "freight": {
+          "type": "number"
+        },
+        "estimatedTotal": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "quoteNumber",
+        "userId",
+        "createdDate",
+        "validUntil",
+        "companyName",
+        "contactName",
+        "email",
+        "projectName",
+        "deliveryPostalCode",
+        "deliveryWindow",
+        "notes",
+        "items",
+        "listSubtotal",
+        "discountRate",
+        "discountLabel",
+        "discountAmount",
+        "netSubtotal",
+        "freight",
+        "estimatedTotal",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private customer and contractor account profiles keyed by Firebase Auth UID."
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/SavedOrder" },
+      "description": "Order history belonging to the authenticated user."
+    },
+    "/users/{userId}/quotes/{quoteId}": {
+      "schema": { "$ref": "#/entities/SavedQuote" },
+      "description": "Saved formal contractor price quotes belonging to the authenticated user."
+    }
+  }
+}

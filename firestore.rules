@@ -1,0 +1,313 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedOwner(userId) {
+      return isSignedIn()
+        && request.auth.uid == userId
+        && request.auth.token.email_verified == true;
+    }
+
+    // Validation Blueprint: UserProfile
+    function isValidUserProfileFields(data, userId) {
+      return data.keys().hasAll(['uid', 'accountType', 'displayName', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'uid',
+          'accountType',
+          'displayName',
+          'email',
+          'phone',
+          'companyName',
+          'address',
+          'postalCode',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid == userId
+        && data.uid == request.auth.uid
+        && data.accountType in ['retail', 'contractor']
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 100
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 160
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
+        && (!('companyName' in data) || (data.companyName is string && data.companyName.size() <= 120))
+        && (!('address' in data) || (data.address is string && data.address.size() <= 200))
+        && (!('postalCode' in data) || (data.postalCode is string && data.postalCode.size() <= 16))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserProfileCreate(data, userId) {
+      return isValidUserProfileFields(data, userId)
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidUserProfileUpdate(data, oldData, userId) {
+      return isValidUserProfileFields(data, userId)
+        && data.uid == oldData.uid
+        && data.email == oldData.email
+        && data.createdAt == oldData.createdAt
+        && data.updatedAt == request.time;
+    }
+
+    // Validation Blueprint: SavedOrder
+    function isValidSavedOrder(data, userId) {
+      return data.keys().hasAll([
+          'orderNumber',
+          'userId',
+          'placedAt',
+          'status',
+          'customerName',
+          'customerEmail',
+          'customerPhone',
+          'deliveryAddress',
+          'postalCode',
+          'paymentMethod',
+          'items',
+          'subtotal',
+          'shipping',
+          'vatIncluded',
+          'total',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'orderNumber',
+          'userId',
+          'placedAt',
+          'status',
+          'customerName',
+          'customerEmail',
+          'customerPhone',
+          'deliveryAddress',
+          'postalCode',
+          'paymentMethod',
+          'items',
+          'subtotal',
+          'shipping',
+          'vatIncluded',
+          'total',
+          'createdAt'
+        ])
+        && data.orderNumber is string
+        && data.orderNumber.size() >= 4
+        && data.orderNumber.size() <= 32
+        && data.orderNumber.matches('^TEH-[A-Z0-9\\-]+$')
+        && data.userId is string
+        && data.userId == userId
+        && data.userId == request.auth.uid
+        && data.placedAt is string
+        && data.placedAt.size() >= 4
+        && data.placedAt.size() <= 40
+        && data.status == 'confirmed'
+        && data.customerName is string
+        && data.customerName.size() >= 2
+        && data.customerName.size() <= 100
+        && data.customerEmail is string
+        && data.customerEmail.size() >= 3
+        && data.customerEmail.size() <= 160
+        && data.customerPhone is string
+        && data.customerPhone.size() >= 7
+        && data.customerPhone.size() <= 30
+        && data.deliveryAddress is string
+        && data.deliveryAddress.size() >= 4
+        && data.deliveryAddress.size() <= 200
+        && data.postalCode is string
+        && data.postalCode.size() >= 4
+        && data.postalCode.size() <= 20
+        && data.paymentMethod in ['card', 'net30', 'cod', 'pickup']
+        && data.items is list
+        && data.items.size() >= 1
+        && data.items.size() <= 50
+        && data.items[0] is map
+        && data.subtotal is number
+        && data.subtotal >= 0
+        && data.shipping is number
+        && data.shipping >= 0
+        && data.vatIncluded is number
+        && data.vatIncluded >= 0
+        && data.total is number
+        && data.total > 0
+        && data.createdAt is timestamp
+        && data.createdAt == request.time;
+    }
+
+    // Validation Blueprint: SavedQuote
+    function isValidSavedQuote(data, userId) {
+      return data.keys().hasAll([
+          'quoteNumber',
+          'userId',
+          'createdDate',
+          'validUntil',
+          'companyName',
+          'contactName',
+          'email',
+          'projectName',
+          'deliveryPostalCode',
+          'deliveryWindow',
+          'notes',
+          'items',
+          'listSubtotal',
+          'discountRate',
+          'discountLabel',
+          'discountAmount',
+          'netSubtotal',
+          'freight',
+          'estimatedTotal',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'quoteNumber',
+          'userId',
+          'createdDate',
+          'validUntil',
+          'companyName',
+          'contactName',
+          'email',
+          'phone',
+          'projectName',
+          'deliveryPostalCode',
+          'deliveryWindow',
+          'notes',
+          'items',
+          'listSubtotal',
+          'discountRate',
+          'discountLabel',
+          'discountAmount',
+          'netSubtotal',
+          'freight',
+          'estimatedTotal',
+          'createdAt'
+        ])
+        && data.quoteNumber is string
+        && data.quoteNumber.size() >= 4
+        && data.quoteNumber.size() <= 32
+        && data.quoteNumber.matches('^TEH-Q[0-9\\-]+$')
+        && data.userId is string
+        && data.userId == userId
+        && data.userId == request.auth.uid
+        && data.createdDate is string
+        && data.createdDate.size() >= 8
+        && data.createdDate.size() <= 20
+        && data.validUntil is string
+        && data.validUntil.size() >= 8
+        && data.validUntil.size() <= 20
+        && data.companyName is string
+        && data.companyName.size() >= 2
+        && data.companyName.size() <= 120
+        && data.contactName is string
+        && data.contactName.size() >= 2
+        && data.contactName.size() <= 100
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 160
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
+        && data.projectName is string
+        && data.projectName.size() >= 2
+        && data.projectName.size() <= 120
+        && data.deliveryPostalCode is string
+        && data.deliveryPostalCode.size() >= 4
+        && data.deliveryPostalCode.size() <= 20
+        && data.deliveryWindow in ['standard', 'expedited', 'scheduled', 'pickup']
+        && data.notes is string
+        && data.notes.size() <= 500
+        && data.items is list
+        && data.items.size() >= 1
+        && data.items.size() <= 50
+        && data.items[0] is map
+        && data.listSubtotal is number
+        && data.listSubtotal >= 0
+        && data.discountRate is number
+        && data.discountRate >= 0
+        && data.discountRate <= 0.25
+        && data.discountLabel is string
+        && data.discountLabel.size() <= 100
+        && data.discountAmount is number
+        && data.discountAmount >= 0
+        && data.netSubtotal is number
+        && data.netSubtotal >= 0
+        && data.freight is number
+        && data.freight >= 0
+        && data.estimatedTotal is number
+        && data.estimatedTotal > 0
+        && data.createdAt is timestamp
+        && data.createdAt == request.time;
+    }
+
+    // Collection: /users/{userId}
+    match /users/{userId} {
+      allow get: if isVerifiedOwner(userId) && isValidId(userId);
+      allow list: if false;
+      allow create: if isVerifiedOwner(userId)
+        && isValidId(userId)
+        && isValidUserProfileCreate(incoming(), userId);
+      allow update: if isVerifiedOwner(userId)
+        && isValidId(userId)
+        && isValidUserProfileUpdate(incoming(), existing(), userId)
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'accountType',
+          'displayName',
+          'phone',
+          'companyName',
+          'address',
+          'postalCode',
+          'updatedAt'
+        ]);
+      allow delete: if false;
+
+      // Subcollection: /users/{userId}/orders/{orderId}
+      match /orders/{orderId} {
+        allow get: if isVerifiedOwner(userId) && isValidId(userId) && isValidId(orderId);
+        allow list: if isVerifiedOwner(userId)
+          && isValidId(userId)
+          && resource.data.userId == request.auth.uid;
+        allow create: if isVerifiedOwner(userId)
+          && isValidId(userId)
+          && isValidId(orderId)
+          && isValidSavedOrder(incoming(), userId)
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update, delete: if false;
+      }
+
+      // Subcollection: /users/{userId}/quotes/{quoteId}
+      match /quotes/{quoteId} {
+        allow get: if isVerifiedOwner(userId) && isValidId(userId) && isValidId(quoteId);
+        allow list: if isVerifiedOwner(userId)
+          && isValidId(userId)
+          && resource.data.userId == request.auth.uid;
+        allow create: if isVerifiedOwner(userId)
+          && isValidId(userId)
+          && isValidId(quoteId)
+          && isValidSavedQuote(incoming(), userId)
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if false;
+        allow delete: if isVerifiedOwner(userId) && isValidId(userId) && isValidId(quoteId);
+      }
+    }
+  }
+}

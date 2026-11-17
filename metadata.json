@@ -1,0 +1,6 @@
+{
+  "name": "VoltGear Electrical & Hardware",
+  "description": "Industrial electrical supply, power tools, circuit protection, online catalog, and instant contractor price quotes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
