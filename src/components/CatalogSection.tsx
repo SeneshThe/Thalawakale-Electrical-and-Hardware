@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Check, Search, Store, X } from 'lucide-react';
-import { CATEGORIES } from '../data/catalog';
+import { CATEGORIES, PRODUCTS } from '../data/catalog';
 import { CategoryId, Product } from '../types/store';
 import { formatCurrency } from '../utils/pricing';
 import { ProductImage } from './ProductImage';
@@ -45,7 +45,7 @@ export function CatalogSection({
   }, [recentlyAddedId]);
 
   const showStoreDeskCard =
-    selectedCategory === 'all' && searchQuery.trim() === '' && products.length === 7;
+    selectedCategory === 'all' && searchQuery.trim() === '' && products.length === PRODUCTS.length;
 
   return (
     <section id="catalog" className="py-12 lg:py-16 bg-white no-print">
@@ -73,7 +73,7 @@ export function CatalogSection({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search tool, SKU, SLS 733, 230V..."
+                placeholder="Search tool, uPVC, pump, lock, paint..."
                 className="w-full h-10 pl-10 pr-9 text-sm bg-zinc-50 border border-zinc-300 rounded-md text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition-colors"
               />
               {searchQuery && (
@@ -270,7 +270,7 @@ export function CatalogSection({
                     No. 42, Main Street Showroom &amp; Trade Desk
                   </h3>
                   <p className="text-sm text-zinc-300 leading-relaxed">
-                    Visit our counter Mon–Sat 07:30–19:00 for same-day pickup, full 90m cable coils, MCB/RCCB breakers, PVC conduits, or estate bulk supply inquiries (+94 51 222 4190).
+                    Visit our counter Mon–Sat 07:30–19:00 for same-day pickup across cable coils, MCB/RCCBs, SLS 147 uPVC pipes, water pumps, brass locks, and exterior paints (+94 51 222 4190).
                   </p>
                 </div>
 

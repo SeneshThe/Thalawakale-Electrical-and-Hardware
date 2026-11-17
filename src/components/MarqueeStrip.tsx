@@ -1,8 +1,8 @@
 export function MarqueeStrip() {
   const highlights = [
     'Free delivery over LKR 45,000',
-    'SLS 733 · BS EN 60898 · IEC 60900 Stock',
-    '230V/400V 50Hz · 13A Type-G Mains',
+    'SLS 733 Copper · SLS 147 uPVC · BS EN 60898',
+    '230V/400V 50Hz · Pumps, Locks & Paints',
     'Same-day Thalawakale pickup & dispatch',
   ];
 

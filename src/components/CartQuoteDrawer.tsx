@@ -428,7 +428,7 @@ export function CartQuoteDrawer({
                     Your order cart is empty
                   </p>
                   <p className="text-sm text-zinc-500 max-w-xs mb-5">
-                    Browse brushless tools, DB boards, or SLS 733 copper cables in the catalog to start an order.
+                    Browse brushless tools, DB boards, uPVC plumbing, water pumps, brass locks, or SLS 733 copper cables to start an order.
                   </p>
                   <button
                     type="button"

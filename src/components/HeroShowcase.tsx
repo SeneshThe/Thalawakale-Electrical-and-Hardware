@@ -4,9 +4,11 @@ import {
   ArrowRight,
   Cable,
   Cpu,
+  Droplets,
   Gauge,
   Hammer,
   Lightbulb,
+  Paintbrush,
   Wrench,
 } from 'lucide-react';
 import { CATEGORIES } from '../data/catalog';
@@ -30,6 +32,8 @@ const CATEGORY_ICONS: Record<Exclude<CategoryId, 'all'>, typeof Hammer> = {
   'testing-meters': Gauge,
   'lighting-led': Lightbulb,
   'hand-tools': Wrench,
+  'plumbing-pvc': Droplets,
+  'building-hardware': Paintbrush,
 };
 
 export function HeroShowcase({
@@ -180,7 +184,7 @@ export function HeroShowcase({
         </div>
 
         {/* Category Explorer Strip matching reference template */}
-        <div className="mt-7 pt-6 border-t border-zinc-200 flex items-center gap-3 lg:gap-5 overflow-x-auto pb-1">
+        <div className="mt-7 pt-6 border-t border-zinc-200 flex items-center lg:justify-between gap-3 lg:gap-4 overflow-x-auto pb-1">
           <button
             type="button"
             onClick={() => onSelectCategory('all')}
@@ -197,7 +201,7 @@ export function HeroShowcase({
             </span>
           </button>
 
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
             {CATEGORIES.map((cat) => {
               const Icon = CATEGORY_ICONS[cat.id];
               const isActive = selectedCategory === cat.id;

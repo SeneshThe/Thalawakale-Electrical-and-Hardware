@@ -35,7 +35,7 @@ export function PromoBanner({ onSelectCategory }: PromoBannerProps) {
               Complete electrical &amp; hardware supply for Nuwara Eliya &amp; island-wide sites
             </h2>
             <p className="text-sm sm:text-base text-zinc-300 leading-relaxed mb-7">
-              Ready counter stock across brushless tool fleets, SLS 733 copper cables, 1000V VDE insulated kits, and TPN/SPN distribution boards. Direct delivery across Thalawakale, Hatton, Lindula, Nuwara Eliya, and Colombo.
+              Ready counter stock across brushless tool fleets, SLS 733 copper cables, TPN/SPN distribution boards, SLS 147 uPVC plumbing, water pumps, brass locks, and weather-shield paints across Thalawakale, Hatton, Nuwara Eliya, and island-wide.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <button
@@ -48,10 +48,10 @@ export function PromoBanner({ onSelectCategory }: PromoBannerProps) {
               </button>
               <button
                 type="button"
-                onClick={() => onSelectCategory('hand-tools')}
+                onClick={() => onSelectCategory('plumbing-pvc')}
                 className="px-5 py-2.5 bg-zinc-900/80 hover:bg-zinc-800 text-white border border-zinc-700 text-sm font-semibold rounded-md transition-colors cursor-pointer"
               >
-                Browse VDE Hand Tools
+                Browse Plumbing &amp; Pumps
               </button>
             </div>
           </div>

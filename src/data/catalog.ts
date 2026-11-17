@@ -39,6 +39,18 @@ export const CATEGORIES: CategoryInfo[] = [
     shortLabel: 'Hand Tools',
     countLabel: '1000V VDE',
   },
+  {
+    id: 'plumbing-pvc',
+    label: 'Plumbing & PVC',
+    shortLabel: 'Plumbing',
+    countLabel: 'SLS 147 uPVC & Pumps',
+  },
+  {
+    id: 'building-hardware',
+    label: 'Building & Paint',
+    shortLabel: 'Building',
+    countLabel: 'Locks, Paint & Masonry',
+  },
 ];
 
 export const PRODUCTS: Product[] = [
@@ -223,6 +235,108 @@ export const PRODUCTS: Product[] = [
     variants: [
       { id: 'case', label: '9-Pc Precision Foam Case', priceDelta: 0, skuSuffix: '9PC', stockCount: 37 },
       { id: 'master', label: '16-Pc Master Panel Case', priceDelta: 26500, skuSuffix: '16P', stockCount: 14 },
+    ],
+  },
+  {
+    id: 'domestic-water-pump',
+    sku: 'TEH-PMP-050',
+    name: '0.5 HP Cast-Iron Centrifugal Domestic Water Pump',
+    shortName: '0.5 HP Water Pump',
+    category: 'plumbing-pvc',
+    categoryLabel: 'Plumbing & PVC',
+    price: 34500,
+    compareAtPrice: 41000,
+    image: '/src/assets/images/sri_lankan_water_pump_1794895436618.jpg',
+    summary:
+      'High-head domestic booster & overhead-tank pump with 100% copper stator winding, brass impeller, built-in thermal overload protector, and 1" × 1" BSP threaded ports for 230V 50Hz mains.',
+    compliance: '230V 50Hz · 100% Copper Winding',
+    warranty: '1-Year Motor & Coil Warranty',
+    specs: [
+      { label: 'Motor Power', value: '0.5 HP (370W) · Copper Stator' },
+      { label: 'Max Delivery Head', value: '35 Metres · 35 L/min Flow' },
+      { label: 'Inlet / Outlet', value: '1" × 1" (25mm) Brass BSP' },
+      { label: 'Protection', value: 'Thermal Overload · IP44 Body' },
+    ],
+    variants: [
+      { id: '05hp-std', label: '0.5 HP Cast-Iron Pump (Copper)', priceDelta: 0, skuSuffix: '05H', stockCount: 29 },
+      { id: '10hp-pro', label: '1.0 HP High-Head Estate Pump', priceDelta: 17500, skuSuffix: '10H', stockCount: 15 },
+    ],
+  },
+  {
+    id: 'upvc-plumbing-brass-kit',
+    sku: 'TEH-PVC-020',
+    name: 'SLS 147 uPVC Pipe Fittings & Forged Brass Valve Set',
+    shortName: 'uPVC & Brass Valve Set',
+    category: 'plumbing-pvc',
+    categoryLabel: 'Plumbing & PVC',
+    price: 14500,
+    compareAtPrice: 17200,
+    image: '/src/assets/images/upvc_plumbing_brass_kit_1794895438069.jpg',
+    summary:
+      'Complete Sri Lankan household plumbing repair & line kit featuring Type-1000 / PN11 SLS 147 grey uPVC elbows, tees, and sockets paired with a forged full-bore brass ball valve and 1/2" garden bib tap.',
+    compliance: 'SLS 147 Type-1000 · CW617N Brass',
+    warranty: 'Pressure-Tested Valve Seal Guarantee',
+    specs: [
+      { label: 'Pipe Standard', value: 'SLS 147 Type-1000 (PN11)' },
+      { label: 'Line Sizes', value: '20mm (3/4") & 25mm (1")' },
+      { label: 'Valves Included', value: '1" Brass Ball Valve + 1/2" Bib Tap' },
+      { label: 'Fittings Pack', value: 'Elbows, Tees & Sockets (8-Pc)' },
+    ],
+    variants: [
+      { id: '20mm-kit', label: '20mm (3/4") Fittings + Brass Valve', priceDelta: 0, skuSuffix: '20M', stockCount: 74 },
+      { id: '25mm-kit', label: '25mm (1") Mains + Valve Combo', priceDelta: 4500, skuSuffix: '25M', stockCount: 46 },
+      { id: 'valve-pair', label: 'Brass Ball Valve & Bib Tap Pair', priceDelta: -5500, skuSuffix: 'VLV', stockCount: 62 },
+    ],
+  },
+  {
+    id: 'weather-shield-paint-kit',
+    sku: 'TEH-PNT-10L',
+    name: 'Hill-Country Weather-Shield Exterior Paint 10L & Roller Kit',
+    shortName: '10L Exterior Paint Kit',
+    category: 'building-hardware',
+    categoryLabel: 'Building & Paint',
+    price: 24500,
+    compareAtPrice: 29000,
+    image: '/src/assets/images/exterior_paint_roller_kit_1794895438350.jpg',
+    summary:
+      'High-opacity anti-fungal & algae-resistant exterior acrylic emulsion formulated for cool hill-country mist and monsoon rain. Supplied with a 4" pure bristle brush and 9" sleeve roller tray.',
+    compliance: 'Anti-Fungal · Low-VOC Monsoon Coat',
+    warranty: '7-Year Exterior Peel & Fade Shield',
+    specs: [
+      { label: 'Drum Volume', value: '10 Litres · Brilliant White' },
+      { label: 'Wall Coverage', value: '110–130 m² (2 Coats)' },
+      { label: 'Dry Time', value: '30 Min Touch / 3 Hr Recoat' },
+      { label: 'Applicators', value: '4" Bristle Brush + 9" Roller Tray' },
+    ],
+    variants: [
+      { id: '10l-white', label: '10L Brilliant White + Brush & Roller', priceDelta: 0, skuSuffix: '10L', stockCount: 41 },
+      { id: '4l-white', label: '4L Bucket + 4" Bristle Brush', priceDelta: -12000, skuSuffix: '04L', stockCount: 68 },
+      { id: '20l-trade', label: '20L Trade Drum + Twin Rollers', priceDelta: 19500, skuSuffix: '20L', stockCount: 18 },
+    ],
+  },
+  {
+    id: 'brass-mortise-lockset',
+    sku: 'TEH-LCK-304',
+    name: '304 Stainless & Solid Brass Mortise Lockset + 65mm Padlock',
+    shortName: 'Brass Mortise Lockset',
+    category: 'building-hardware',
+    categoryLabel: 'Building & Paint',
+    price: 12800,
+    compareAtPrice: 15500,
+    image: '/src/assets/images/brass_door_lock_padlock_1794895438816.jpg',
+    summary:
+      'Rust-resistant 304 stainless steel & brushed brass lever door lockset with 5-pin solid brass euro-profile cylinder, 3 brass keys, and a hardened-shackle 65mm solid brass gate padlock.',
+    compliance: 'BS EN 12209 · SUS304 Corrosion Safe',
+    warranty: '5-Year Latch & Cylinder Warranty',
+    specs: [
+      { label: 'Handle & Plate', value: '304 Stainless + Brushed Brass' },
+      { label: 'Lock Cylinder', value: '70mm Solid Brass 5-Pin Euro' },
+      { label: 'Gate Padlock', value: '65mm Brass Body · Hard Shackle' },
+      { label: 'Keys Supplied', value: '3 Mortise Keys + 3 Padlock Keys' },
+    ],
+    variants: [
+      { id: 'mortise-combo', label: 'Mortise Lockset + 65mm Brass Padlock', priceDelta: 0, skuSuffix: 'CMB', stockCount: 55 },
+      { id: 'mortise-only', label: 'Mortise Door Lockset + 3 Keys', priceDelta: -3300, skuSuffix: 'LCK', stockCount: 64 },
     ],
   },
 ];

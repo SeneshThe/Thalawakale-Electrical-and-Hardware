@@ -5,7 +5,9 @@ export type CategoryId =
   | 'wiring-conduit'
   | 'testing-meters'
   | 'lighting-led'
-  | 'hand-tools';
+  | 'hand-tools'
+  | 'plumbing-pvc'
+  | 'building-hardware';
 
 export interface ProductVariant {
   id: string;
