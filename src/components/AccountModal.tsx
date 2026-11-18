@@ -437,13 +437,15 @@ export function AccountModal({ isOpen, onClose }: AccountModalProps) {
                           </p>
                           <p className="text-xs text-zinc-600 mt-0.5">
                             {o.items.length} SKU{o.items.length === 1 ? '' : 's'} ·{' '}
-                            {o.paymentMethod === 'pickup'
-                              ? 'Pay at Counter'
-                              : o.paymentMethod === 'net30'
-                                ? 'Bank Transfer / Trade'
-                                : o.paymentMethod === 'cod'
-                                  ? 'Cash on Delivery'
-                                  : 'Card / LankaQR'}
+                            {o.paymentChannel
+                              ? `${o.paymentChannel}${o.paymentReference ? ` · ${o.paymentReference}` : ''}`
+                              : o.paymentMethod === 'pickup'
+                                ? 'Pay at Counter'
+                                : o.paymentMethod === 'net30'
+                                  ? 'Bank Transfer / Trade'
+                                  : o.paymentMethod === 'cod'
+                                    ? 'Cash on Delivery'
+                                    : 'Card / LankaQR'}
                           </p>
                         </div>
 

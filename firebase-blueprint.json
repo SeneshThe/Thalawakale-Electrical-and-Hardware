@@ -107,6 +107,18 @@
           "type": "string",
           "enum": ["card", "net30", "cod", "pickup"]
         },
+        "paymentStatus": {
+          "type": "string",
+          "enum": ["paid_sandbox", "pending_cod", "pending_pickup", "pending_net30"]
+        },
+        "paymentReference": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "paymentChannel": {
+          "type": "string",
+          "maxLength": 64
+        },
         "items": {
           "type": "array",
           "description": "Bounded list of up to 50 purchased line items."

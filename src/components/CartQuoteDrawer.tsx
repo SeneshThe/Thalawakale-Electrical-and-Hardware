@@ -19,11 +19,15 @@ import {
   SubmittedOrder,
 } from '../types/store';
 import {
+  buildOfflinePaymentTransaction,
+} from '../utils/paymentSandbox';
+import {
   calculateCartTotals,
   formatCurrency,
   FREE_SHIPPING_THRESHOLD,
   validateCheckoutForm,
 } from '../utils/pricing';
+import { PaymentGatewaySandbox } from './PaymentGatewaySandbox';
 import { ProductImage } from './ProductImage';
 
 interface CartQuoteDrawerProps {
@@ -62,7 +66,7 @@ export function CartQuoteDrawer({
 }: CartQuoteDrawerProps) {
   const { user, profile, saveOrderToAccount } = useAuth();
   const [drawerTab, setDrawerTab] = useState<'cart' | 'saved'>('cart');
-  const [checkoutStep, setCheckoutStep] = useState<'bag' | 'form' | 'confirmed'>('bag');
+  const [checkoutStep, setCheckoutStep] = useState<'bag' | 'form' | 'gateway' | 'confirmed'>('bag');
   const [form, setForm] = useState<CheckoutFormData>(INITIAL_CHECKOUT);
   const [errors, setErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
   const [orderReceipt, setOrderReceipt] = useState<SubmittedOrder | null>(null);
@@ -95,12 +99,7 @@ export function CartQuoteDrawer({
 
   const cartTotals = calculateCartTotals(cartItems, form.paymentMethod);
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validation = validateCheckoutForm(form);
-    setErrors(validation);
-    if (Object.keys(validation).length > 0) return;
-
+  const finalizeOrder = (payment: SubmittedOrder['payment']) => {
     const seq = String(Math.floor(1000 + (Date.now() % 9000)));
     const newOrder: SubmittedOrder = {
       orderNumber: `TEH-${seq}`,
@@ -115,6 +114,7 @@ export function CartQuoteDrawer({
       shipping: cartTotals.shipping,
       tax: cartTotals.tax,
       total: cartTotals.total,
+      payment,
     };
     setOrderReceipt(newOrder);
     setOrderSavedToAccount(Boolean(user));
@@ -126,6 +126,20 @@ export function CartQuoteDrawer({
     }
     onClearCart();
     setCheckoutStep('confirmed');
+  };
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    const validation = validateCheckoutForm(form);
+    setErrors(validation);
+    if (Object.keys(validation).length > 0) return;
+
+    if (form.paymentMethod === 'card') {
+      setCheckoutStep('gateway');
+      return;
+    }
+
+    finalizeOrder(buildOfflinePaymentTransaction(form.paymentMethod));
   };
 
   const resetAndClose = () => {
@@ -285,6 +299,14 @@ export function CartQuoteDrawer({
                     {formatCurrency(orderReceipt.tax)}
                   </dd>
                 </div>
+                {orderReceipt.payment && (
+                  <div className="flex justify-between text-zinc-600 text-xs pt-1">
+                    <dt>Payment Ref</dt>
+                    <dd className="font-mono text-zinc-900 text-right">
+                      {orderReceipt.payment.paymentChannel} · {orderReceipt.payment.transactionId}
+                    </dd>
+                  </div>
+                )}
                 <div className="flex justify-between font-bold text-zinc-950 text-base pt-2 border-t border-zinc-200">
                   <dt>Total Payable</dt>
                   <dd className="font-mono tabular-nums whitespace-nowrap">
@@ -380,6 +402,13 @@ export function CartQuoteDrawer({
               </div>
             )}
           </div>
+        ) : checkoutStep === 'gateway' ? (
+          <PaymentGatewaySandbox
+            amount={cartTotals.total}
+            customerName={form.fullName}
+            onBack={() => setCheckoutStep('form')}
+            onAuthorized={(transaction) => finalizeOrder(transaction)}
+          />
         ) : checkoutStep === 'form' ? (
           <form
             onSubmit={handlePlaceOrder}
@@ -537,7 +566,9 @@ export function CartQuoteDrawer({
                 type="submit"
                 className="w-full h-11 bg-amber-400 hover:bg-amber-300 text-zinc-950 text-sm font-bold rounded-md cursor-pointer"
               >
-                Confirm &amp; Place Order
+                {form.paymentMethod === 'card'
+                  ? 'Continue to Payment Sandbox'
+                  : 'Confirm & Place Order'}
               </button>
             </div>
           </form>

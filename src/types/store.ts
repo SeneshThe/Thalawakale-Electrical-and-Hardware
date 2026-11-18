@@ -68,6 +68,20 @@ export interface CheckoutFormData {
   paymentMethod: 'card' | 'net30' | 'cod' | 'pickup';
 }
 
+export type PaymentStatus =
+  | 'paid_sandbox'
+  | 'pending_cod'
+  | 'pending_pickup'
+  | 'pending_net30';
+
+export interface PaymentTransaction {
+  transactionId: string;
+  gateway: 'card-sandbox' | 'lankaqr-sandbox' | 'offline-counter' | 'trade-credit';
+  paymentStatus: PaymentStatus;
+  paymentChannel: string;
+  authorizedAt: string;
+}
+
 export interface SubmittedOrder {
   orderNumber: string;
   placedAt: string;
@@ -77,6 +91,7 @@ export interface SubmittedOrder {
   shipping: number;
   tax: number;
   total: number;
+  payment?: PaymentTransaction;
 }
 
 export type UserAccountType = 'retail' | 'contractor';
@@ -103,6 +118,9 @@ export interface SavedOrderRecord {
   deliveryAddress: string;
   postalCode: string;
   paymentMethod: CheckoutFormData['paymentMethod'];
+  paymentStatus?: PaymentStatus;
+  paymentReference?: string;
+  paymentChannel?: string;
   items: CartItem[];
   subtotal: number;
   shipping: number;

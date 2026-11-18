@@ -107,6 +107,9 @@ service cloud.firestore {
           'deliveryAddress',
           'postalCode',
           'paymentMethod',
+          'paymentStatus',
+          'paymentReference',
+          'paymentChannel',
           'items',
           'subtotal',
           'shipping',
@@ -141,6 +144,9 @@ service cloud.firestore {
         && data.postalCode.size() >= 4
         && data.postalCode.size() <= 20
         && data.paymentMethod in ['card', 'net30', 'cod', 'pickup']
+        && (!('paymentStatus' in data) || data.paymentStatus in ['paid_sandbox', 'pending_cod', 'pending_pickup', 'pending_net30'])
+        && (!('paymentReference' in data) || (data.paymentReference is string && data.paymentReference.size() <= 48))
+        && (!('paymentChannel' in data) || (data.paymentChannel is string && data.paymentChannel.size() <= 64))
         && data.items is list
         && data.items.size() >= 1
         && data.items.size() <= 50

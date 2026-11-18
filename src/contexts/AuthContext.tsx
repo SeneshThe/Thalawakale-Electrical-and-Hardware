@@ -133,6 +133,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               d.paymentMethod === 'pickup'
                 ? d.paymentMethod
                 : 'card',
+            paymentStatus:
+              d.paymentStatus === 'paid_sandbox' ||
+              d.paymentStatus === 'pending_cod' ||
+              d.paymentStatus === 'pending_pickup' ||
+              d.paymentStatus === 'pending_net30'
+                ? d.paymentStatus
+                : undefined,
+            paymentReference:
+              typeof d.paymentReference === 'string' ? d.paymentReference : undefined,
+            paymentChannel:
+              typeof d.paymentChannel === 'string' ? d.paymentChannel : undefined,
             items: Array.isArray(d.items) ? d.items : [],
             subtotal: Number(d.subtotal ?? 0),
             shipping: Number(d.shipping ?? 0),
@@ -278,6 +289,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         20
       ),
       paymentMethod: order.customer.paymentMethod,
+      ...(order.payment
+        ? {
+            paymentStatus: order.payment.paymentStatus,
+            paymentReference: clampStr(order.payment.transactionId, 48),
+            paymentChannel: clampStr(order.payment.paymentChannel, 64),
+          }
+        : {}),
       items: safeItems,
       subtotal: Number(order.subtotal),
       shipping: Number(order.shipping),
