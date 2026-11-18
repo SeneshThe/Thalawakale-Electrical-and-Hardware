@@ -16,7 +16,14 @@ export function ProductImage({
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
 
-  if (failed || !src) {
+  const base = import.meta.env.BASE_URL || './';
+  const resolvedSrc = src.startsWith('/src/assets/')
+    ? `${base}${src.slice(1)}`
+    : src.startsWith('src/assets/')
+      ? `${base}${src}`
+      : src;
+
+  if (failed || !resolvedSrc) {
     return (
       <div
         className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200 text-zinc-500 p-4 text-center"
@@ -33,7 +40,7 @@ export function ProductImage({
 
   return (
     <img
-      src={src}
+      src={resolvedSrc}
       alt={alt}
       referrerPolicy="no-referrer"
       onError={() => setFailed(true)}

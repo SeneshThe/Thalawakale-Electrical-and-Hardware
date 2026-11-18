@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, Check, Search, Store, X } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Bookmark,
+  Calculator,
+  Check,
+  Scale,
+  Search,
+  Store,
+  X,
+} from 'lucide-react';
 import { CATEGORIES, PRODUCTS } from '../data/catalog';
 import { CategoryId, Product } from '../types/store';
 import { formatCurrency } from '../utils/pricing';
@@ -13,9 +22,16 @@ interface CatalogSectionProps {
   searchQuery: string;
   sortBy: SortOption;
   cartQtyByProduct?: Record<string, number>;
+  savedIds?: string[];
+  compareIds?: string[];
+  showSavedOnly?: boolean;
   onSelectCategory: (category: CategoryId) => void;
   onSearchChange: (value: string) => void;
   onSortChange: (sort: SortOption) => void;
+  onToggleShowSavedOnly?: () => void;
+  onToggleSaved?: (product: Product) => void;
+  onToggleCompare?: (product: Product) => void;
+  onOpenCalculators?: () => void;
   onResetFilters: () => void;
   onAddToCart: (product: Product) => void;
   onInspectProduct: (product: Product) => void;
@@ -28,9 +44,16 @@ export function CatalogSection({
   searchQuery,
   sortBy,
   cartQtyByProduct = {},
+  savedIds = [],
+  compareIds = [],
+  showSavedOnly = false,
   onSelectCategory,
   onSearchChange,
   onSortChange,
+  onToggleShowSavedOnly,
+  onToggleSaved,
+  onToggleCompare,
+  onOpenCalculators,
   onResetFilters,
   onAddToCart,
   onInspectProduct,
@@ -45,7 +68,10 @@ export function CatalogSection({
   }, [recentlyAddedId]);
 
   const showStoreDeskCard =
-    selectedCategory === 'all' && searchQuery.trim() === '' && products.length === PRODUCTS.length;
+    selectedCategory === 'all' &&
+    !showSavedOnly &&
+    searchQuery.trim() === '' &&
+    products.length === PRODUCTS.length;
 
   return (
     <section id="catalog" className="py-12 lg:py-16 bg-white no-print">
@@ -73,7 +99,7 @@ export function CatalogSection({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search tool, uPVC, pump, lock, paint..."
+                placeholder="Search tools, cable, uPVC, paint..."
                 className="w-full h-10 pl-10 pr-9 text-sm bg-zinc-50 border border-zinc-300 rounded-md text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:bg-white transition-colors"
               />
               {searchQuery && (
@@ -102,6 +128,17 @@ export function CatalogSection({
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
               </select>
+
+              {onOpenCalculators && (
+                <button
+                  type="button"
+                  onClick={onOpenCalculators}
+                  className="h-10 px-3.5 bg-amber-400 hover:bg-amber-300 text-zinc-950 text-xs font-semibold rounded-md inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  <Calculator className="w-3.5 h-3.5" />
+                  <span>Site Calculators</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -110,9 +147,12 @@ export function CatalogSection({
         <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b border-zinc-200">
           <button
             type="button"
-            onClick={() => onSelectCategory('all')}
+            onClick={() => {
+              if (showSavedOnly && onToggleShowSavedOnly) onToggleShowSavedOnly();
+              onSelectCategory('all');
+            }}
             className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              selectedCategory === 'all'
+              selectedCategory === 'all' && !showSavedOnly
                 ? 'bg-zinc-950 text-white'
                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-950'
             }`}
@@ -123,9 +163,12 @@ export function CatalogSection({
             <button
               key={cat.id}
               type="button"
-              onClick={() => onSelectCategory(cat.id)}
+              onClick={() => {
+                if (showSavedOnly && onToggleShowSavedOnly) onToggleShowSavedOnly();
+                onSelectCategory(cat.id);
+              }}
               className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                selectedCategory === cat.id
+                selectedCategory === cat.id && !showSavedOnly
                   ? 'bg-zinc-950 text-white'
                   : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-950'
               }`}
@@ -133,6 +176,20 @@ export function CatalogSection({
               {cat.label}
             </button>
           ))}
+          {onToggleShowSavedOnly && (
+            <button
+              type="button"
+              onClick={onToggleShowSavedOnly}
+              className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 cursor-pointer ${
+                showSavedOnly
+                  ? 'bg-amber-400 text-zinc-950'
+                  : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-950'
+              }`}
+            >
+              <Bookmark className="w-3.5 h-3.5" />
+              <span>Saved ({savedIds.length})</span>
+            </button>
+          )}
         </div>
 
         {/* Product Grid or Empty State */}
@@ -162,6 +219,8 @@ export function CatalogSection({
             {products.map((product) => {
               const cartQty = cartQtyByProduct[product.id] ?? 0;
               const justAddedCart = recentlyAddedId === product.id;
+              const isSaved = savedIds.includes(product.id);
+              const isCompared = compareIds.includes(product.id);
 
               return (
                 <article
@@ -170,19 +229,44 @@ export function CatalogSection({
                 >
                   <div>
                     {/* Studio Product Frame */}
-                    <button
-                      type="button"
-                      onClick={() => onInspectProduct(product)}
-                      aria-label={`Inspect technical specs for ${product.name}`}
-                      className="w-full aspect-[4/3] bg-[#e3e3e3] p-2 flex items-center justify-center relative overflow-hidden cursor-pointer focus-visible:outline-2 focus-visible:outline-amber-500"
-                    >
-                      <ProductImage
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-                        fallbackLabel={product.shortName}
-                      />
-                    </button>
+                    <div className="w-full aspect-[4/3] bg-[#e3e3e3] p-2 flex items-center justify-center relative overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => onInspectProduct(product)}
+                        aria-label={`Inspect technical specs for ${product.name}`}
+                        className="w-full h-full flex items-center justify-center cursor-pointer focus-visible:outline-2 focus-visible:outline-amber-500"
+                      >
+                        <ProductImage
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+                          fallbackLabel={product.shortName}
+                        />
+                      </button>
+
+                      {onToggleSaved && (
+                        <button
+                          type="button"
+                          onClick={() => onToggleSaved(product)}
+                          aria-label={
+                            isSaved
+                              ? `Remove ${product.shortName} from saved items`
+                              : `Save ${product.shortName} for later`
+                          }
+                          aria-pressed={isSaved}
+                          className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-md border flex items-center justify-center transition-colors cursor-pointer ${
+                            isSaved
+                              ? 'bg-zinc-950 border-zinc-950 text-amber-400'
+                              : 'bg-white/90 hover:bg-white border-zinc-300/80 text-zinc-600 hover:text-zinc-950'
+                          }`}
+                        >
+                          <Bookmark
+                            className="w-3.5 h-3.5"
+                            fill={isSaved ? 'currentColor' : 'none'}
+                          />
+                        </button>
+                      )}
+                    </div>
 
                     {/* Card Details */}
                     <div className="p-4 pb-3">
@@ -251,6 +335,27 @@ export function CatalogSection({
                         <span>Add to Cart</span>
                       )}
                     </button>
+
+                    {onToggleCompare && (
+                      <button
+                        type="button"
+                        onClick={() => onToggleCompare(product)}
+                        aria-label={
+                          isCompared
+                            ? `Remove ${product.shortName} from comparison`
+                            : `Compare ${product.shortName}`
+                        }
+                        aria-pressed={isCompared}
+                        title={isCompared ? 'Selected to compare' : 'Compare specs'}
+                        className={`w-9 h-8 rounded-md border flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
+                          isCompared
+                            ? 'bg-amber-400 border-amber-500 text-zinc-950'
+                            : 'bg-white hover:bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-zinc-950'
+                        }`}
+                      >
+                        <Scale className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                 </article>
               );

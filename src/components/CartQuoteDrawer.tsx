@@ -1,9 +1,21 @@
 import { useEffect, useState } from 'react';
-import { CheckCircle2, Minus, Plus, Store, Trash2, User as UserIcon, X } from 'lucide-react';
+import {
+  Bookmark,
+  CheckCircle2,
+  Minus,
+  Plus,
+  Printer,
+  ShoppingBag,
+  Store,
+  Trash2,
+  User as UserIcon,
+  X,
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
   CartItem,
   CheckoutFormData,
+  Product,
   SubmittedOrder,
 } from '../types/store';
 import {
@@ -18,6 +30,9 @@ interface CartQuoteDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   cartItems: CartItem[];
+  savedProducts?: Product[];
+  onMoveSavedToCart?: (product: Product) => void;
+  onRemoveSaved?: (productId: string) => void;
   onUpdateCartQty: (productId: string, variantId: string, delta: number) => void;
   onRemoveCartItem: (productId: string, variantId: string) => void;
   onClearCart: () => void;
@@ -37,12 +52,16 @@ export function CartQuoteDrawer({
   isOpen,
   onClose,
   cartItems,
+  savedProducts = [],
+  onMoveSavedToCart,
+  onRemoveSaved,
   onUpdateCartQty,
   onRemoveCartItem,
   onClearCart,
   onOpenAccount,
 }: CartQuoteDrawerProps) {
   const { user, profile, saveOrderToAccount } = useAuth();
+  const [drawerTab, setDrawerTab] = useState<'cart' | 'saved'>('cart');
   const [checkoutStep, setCheckoutStep] = useState<'bag' | 'form' | 'confirmed'>('bag');
   const [form, setForm] = useState<CheckoutFormData>(INITIAL_CHECKOUT);
   const [errors, setErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
@@ -117,21 +136,27 @@ export function CartQuoteDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-end bg-zinc-950/50 backdrop-blur-xs no-print"
+      className={`fixed inset-0 z-50 flex justify-end bg-zinc-950/50 backdrop-blur-xs ${
+        checkoutStep === 'confirmed'
+          ? 'print:static print:bg-transparent print:backdrop-blur-none print:block'
+          : 'no-print'
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label="Order Cart Drawer"
       onClick={resetAndClose}
     >
       <div
-        className="w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200"
+        className="w-full max-w-md bg-white h-full flex flex-col shadow-2xl border-l border-zinc-200 print:max-w-none print:h-auto print:border-0 print:shadow-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between gap-4">
+        <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between gap-4 no-print">
           <div>
             <h2 className="font-display font-bold text-base text-zinc-950">
-              Order Cart ({cartTotals.itemCount})
+              {drawerTab === 'saved'
+                ? `Saved Hardware (${savedProducts.length})`
+                : `Order Cart (${cartTotals.itemCount})`}
             </h2>
             <p className="text-[11px] text-zinc-500">
               Prices incl. 18% VAT · Free counter pickup
@@ -148,10 +173,48 @@ export function CartQuoteDrawer({
           </button>
         </div>
 
+        {/* Cart / Saved Switch */}
+        {checkoutStep === 'bag' && (
+          <div className="px-6 pt-2.5 border-b border-zinc-200 flex items-center gap-2 bg-zinc-50 no-print">
+            <button
+              type="button"
+              onClick={() => setDrawerTab('cart')}
+              className={`px-3 py-2 text-xs font-semibold border-b-2 inline-flex items-center gap-1.5 transition-colors cursor-pointer ${
+                drawerTab === 'cart'
+                  ? 'border-zinc-950 text-zinc-950'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>Order Cart ({cartTotals.itemCount})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDrawerTab('saved')}
+              className={`px-3 py-2 text-xs font-semibold border-b-2 inline-flex items-center gap-1.5 transition-colors cursor-pointer ${
+                drawerTab === 'saved'
+                  ? 'border-zinc-950 text-zinc-950'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              <Bookmark className="w-3.5 h-3.5" />
+              <span>Saved ({savedProducts.length})</span>
+            </button>
+          </div>
+        )}
+
         {/* Drawer Body */}
         {checkoutStep === 'confirmed' && orderReceipt ? (
           <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between">
             <div>
+              <div className="hidden print:block pb-3 mb-4 border-b border-zinc-300">
+                <p className="font-display font-bold text-base text-zinc-950">
+                  Thalawakale Electrical &amp; Hardware
+                </p>
+                <p className="text-xs text-zinc-600">
+                  No. 42, Main Street, Thalawakale 22100 · +94 51 222 4190
+                </p>
+              </div>
               <div className="inline-flex items-center gap-2 text-emerald-700 text-sm font-semibold mb-2">
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Order #{orderReceipt.orderNumber} Confirmed</span>
@@ -231,13 +294,91 @@ export function CartQuoteDrawer({
               </dl>
             </div>
 
-            <button
-              type="button"
-              onClick={resetAndClose}
-              className="w-full h-11 mt-6 bg-zinc-950 hover:bg-zinc-800 text-white text-sm font-semibold rounded-md cursor-pointer"
-            >
-              Continue Browsing Catalog
-            </button>
+            <div className="flex items-center gap-2.5 mt-6 no-print">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-4 h-11 bg-white hover:bg-zinc-100 text-zinc-900 border border-zinc-300 text-sm font-semibold rounded-md inline-flex items-center gap-1.5 cursor-pointer shrink-0"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print Receipt</span>
+              </button>
+              <button
+                type="button"
+                onClick={resetAndClose}
+                className="flex-1 h-11 bg-zinc-950 hover:bg-zinc-800 text-white text-sm font-semibold rounded-md cursor-pointer"
+              >
+                Continue Browsing
+              </button>
+            </div>
+          </div>
+        ) : drawerTab === 'saved' && checkoutStep === 'bag' ? (
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {savedProducts.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                <Bookmark className="w-7 h-7 text-zinc-300 mb-3" />
+                <p className="font-display font-bold text-lg text-zinc-900 mb-1">
+                  No saved items yet
+                </p>
+                <p className="text-sm text-zinc-500 max-w-xs mb-5">
+                  Tap the bookmark icon on any product card to save hardware for your next site run or counter visit.
+                </p>
+                <button
+                  type="button"
+                  onClick={resetAndClose}
+                  className="px-5 py-2.5 bg-zinc-950 text-white text-xs font-semibold rounded-md cursor-pointer"
+                >
+                  Browse Catalog
+                </button>
+              </div>
+            ) : (
+              <div className="divide-y divide-zinc-200">
+                {savedProducts.map((item) => (
+                  <div key={item.id} className="py-4 flex gap-3.5 items-start">
+                    <div className="w-16 h-16 bg-zinc-100 rounded-lg p-1.5 shrink-0 flex items-center justify-center">
+                      <ProductImage
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-mono text-zinc-500">{item.sku}</p>
+                      <h4 className="font-semibold text-sm text-zinc-950 leading-snug">
+                        {item.name}
+                      </h4>
+                      <p className="font-mono tabular-nums text-xs font-bold text-zinc-900 mt-1 mb-2.5">
+                        {formatCurrency(item.price)}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        {onMoveSavedToCart && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onMoveSavedToCart(item);
+                              setDrawerTab('cart');
+                            }}
+                            className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-zinc-950 text-xs font-semibold rounded-md cursor-pointer"
+                          >
+                            Move to Cart
+                          </button>
+                        )}
+                        {onRemoveSaved && (
+                          <button
+                            type="button"
+                            onClick={() => onRemoveSaved(item.id)}
+                            aria-label={`Remove ${item.shortName} from saved items`}
+                            className="p-1.5 text-zinc-400 hover:text-red-600 cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : checkoutStep === 'form' ? (
           <form

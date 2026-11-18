@@ -1,6 +1,6 @@
 import { CategoryInfo, Product } from '../types/store';
 
-export const PROMO_BANNER_IMAGE = '/src/assets/images/workshop_promo_banner_1794890014896.jpg';
+export const PROMO_BANNER_IMAGE = 'src/assets/images/workshop_promo_banner_1794890014896.jpg';
 
 export const CATEGORIES: CategoryInfo[] = [
   {
@@ -63,7 +63,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Power Tools',
     price: 74500,
     compareAtPrice: 95000,
-    image: '/src/assets/images/hero_rotary_drill_1794890010955.jpg',
+    image: 'src/assets/images/hero_rotary_drill_1794890010955.jpg',
     summary:
       'High-torque brushless rotary hammer engineered for concrete anchoring, PVC/GI conduit saddling, and building wiring work. Supplied with 230V 50Hz 13A Type-G fast charger.',
     compliance: 'IEC 62841 · 230V 50Hz Type-G',
@@ -91,7 +91,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Testing Meters',
     price: 55000,
     compareAtPrice: 68500,
-    image: '/src/assets/images/hero_clamp_meter_1794890012214.jpg',
+    image: 'src/assets/images/hero_clamp_meter_1794890012214.jpg',
     summary:
       'CAT III 1000V / CAT IV 600V diagnostic clamp meter for CEB/LECO 230V single-phase & 400V 3-phase load balancing, tea-factory motor checks, and earth leakage diagnostics.',
     compliance: 'IEC 61010-1 · CAT IV 600V',
@@ -118,7 +118,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Switchgear & DBs',
     price: 102500,
     compareAtPrice: 119000,
-    image: '/src/assets/images/hero_breaker_panel_1794890011171.jpg',
+    image: 'src/assets/images/hero_breaker_panel_1794890011171.jpg',
     summary:
       'Heavy-gauge powder-coated steel TPN metal-clad DB box with tin-plated copper busbars, 100A 4-pole main isolator, DIN rail for MCB/RCCB breakers, and neutral/earth links for 400V 50Hz supply.',
     compliance: 'IEC 61439 · BS EN 60898',
@@ -145,7 +145,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Power Tools',
     price: 49500,
     compareAtPrice: 61500,
-    image: '/src/assets/images/tool_angle_grinder_1794890011780.jpg',
+    image: 'src/assets/images/tool_angle_grinder_1794890011780.jpg',
     summary:
       'Electronic kickback brake and 8,500 RPM brushless motor built for wall chasing, GI conduit cutting, cable tray prep, and roof-sheet steel work on site.',
     compliance: 'IEC 62841 · 230V 50Hz Charger',
@@ -170,7 +170,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Cables & Wiring',
     price: 124500,
     compareAtPrice: 139500,
-    image: '/src/assets/images/wire_copper_spool_1794890013113.jpg',
+    image: 'src/assets/images/wire_copper_spool_1794890013113.jpg',
     summary:
       '99.97% pure annealed plain copper 6.0 mm² 7-strand SLS 733 cable coils in Red/Brown (Phase), Black/Blue (Neutral), and Green-Yellow (Earth) — 90 metres per full coil.',
     compliance: 'SLS 733 · BS 6004 · 450/750V',
@@ -196,7 +196,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'LED & Lighting',
     price: 33500,
     compareAtPrice: 41500,
-    image: '/src/assets/images/led_jobsite_light_1794890013339.jpg',
+    image: 'src/assets/images/led_jobsite_light_1794890013339.jpg',
     summary:
       '6,500-lumen 5000K daylight floodlight with ribbed die-cast aluminium heatsink, 4kV surge-protected 230V driver, and weather-sealed roll cage built for up-country monsoon conditions.',
     compliance: 'IEC 60598 · IP65 Monsoon Rated',
@@ -221,7 +221,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Hand Tools & VDE',
     price: 58500,
     compareAtPrice: 72000,
-    image: '/src/assets/images/insulated_hand_tools_1794890013942.jpg',
+    image: 'src/assets/images/insulated_hand_tools_1794890013942.jpg',
     summary:
       'Individually dielectric-tested to 10,000V AC and certified for 1000V live DB & switchgear servicing. Includes combination pliers, side cutters, wire strippers, and VDE screwdrivers.',
     compliance: 'IEC 60900 · VDE 1000V AC',
@@ -246,7 +246,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Plumbing & PVC',
     price: 34500,
     compareAtPrice: 41000,
-    image: '/src/assets/images/sri_lankan_water_pump_1794895436618.jpg',
+    image: 'src/assets/images/sri_lankan_water_pump_1794895436618.jpg',
     summary:
       'High-head domestic booster & overhead-tank pump with 100% copper stator winding, brass impeller, built-in thermal overload protector, and 1" × 1" BSP threaded ports for 230V 50Hz mains.',
     compliance: '230V 50Hz · 100% Copper Winding',
@@ -271,7 +271,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Plumbing & PVC',
     price: 14500,
     compareAtPrice: 17200,
-    image: '/src/assets/images/upvc_plumbing_brass_kit_1794895438069.jpg',
+    image: 'src/assets/images/upvc_plumbing_brass_kit_1794895438069.jpg',
     summary:
       'Complete Sri Lankan household plumbing repair & line kit featuring Type-1000 / PN11 SLS 147 grey uPVC elbows, tees, and sockets paired with a forged full-bore brass ball valve and 1/2" garden bib tap.',
     compliance: 'SLS 147 Type-1000 · CW617N Brass',
@@ -297,7 +297,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Building & Paint',
     price: 24500,
     compareAtPrice: 29000,
-    image: '/src/assets/images/exterior_paint_roller_kit_1794895438350.jpg',
+    image: 'src/assets/images/exterior_paint_roller_kit_1794895438350.jpg',
     summary:
       'High-opacity anti-fungal & algae-resistant exterior acrylic emulsion formulated for cool hill-country mist and monsoon rain. Supplied with a 4" pure bristle brush and 9" sleeve roller tray.',
     compliance: 'Anti-Fungal · Low-VOC Monsoon Coat',
@@ -323,7 +323,7 @@ export const PRODUCTS: Product[] = [
     categoryLabel: 'Building & Paint',
     price: 12800,
     compareAtPrice: 15500,
-    image: '/src/assets/images/brass_door_lock_padlock_1794895438816.jpg',
+    image: 'src/assets/images/brass_door_lock_padlock_1794895438816.jpg',
     summary:
       'Rust-resistant 304 stainless steel & brushed brass lever door lockset with 5-pin solid brass euro-profile cylinder, 3 brass keys, and a hardened-shackle 65mm solid brass gate padlock.',
     compliance: 'BS EN 12209 · SUS304 Corrosion Safe',

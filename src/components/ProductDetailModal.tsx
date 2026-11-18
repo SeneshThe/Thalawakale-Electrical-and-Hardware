@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Check, Minus, Plus, ShieldCheck, Store, X } from 'lucide-react';
+import { Bookmark, Check, Minus, Plus, ShieldCheck, Store, X } from 'lucide-react';
 import { Product, ProductVariant } from '../types/store';
 import { formatCurrency } from '../utils/pricing';
 import { ProductImage } from './ProductImage';
 
 interface ProductDetailModalProps {
   product: Product | null;
+  isSaved?: boolean;
+  onToggleSaved?: (product: Product) => void;
   onClose: () => void;
   onAddToCart: (product: Product, variant: ProductVariant, quantity: number) => void;
 }
 
 export function ProductDetailModal({
   product,
+  isSaved = false,
+  onToggleSaved,
   onClose,
   onAddToCart,
 }: ProductDetailModalProps) {
@@ -210,6 +214,26 @@ export function ProductDetailModal({
               >
                 Add to Order Cart · {formatCurrency(unitPrice * quantity)}
               </button>
+
+              {onToggleSaved && (
+                <button
+                  type="button"
+                  onClick={() => onToggleSaved(product)}
+                  aria-label={isSaved ? 'Remove from saved items' : 'Save item for later'}
+                  aria-pressed={isSaved}
+                  className={`h-10 px-3.5 rounded-md border text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+                    isSaved
+                      ? 'bg-zinc-950 border-zinc-950 text-amber-400'
+                      : 'bg-white hover:bg-zinc-50 border-zinc-300 text-zinc-800'
+                  }`}
+                >
+                  <Bookmark
+                    className="w-3.5 h-3.5"
+                    fill={isSaved ? 'currentColor' : 'none'}
+                  />
+                  <span>{isSaved ? 'Saved' : 'Save'}</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
