@@ -27,15 +27,15 @@ export function PromoBanner({ onSelectCategory }: PromoBannerProps) {
           </div>
 
           {/* Foreground Copy */}
-          <div className="relative z-10 max-w-xl p-8 sm:p-12 lg:p-14 text-white">
+          <div className="relative z-10 max-w-lg p-8 sm:p-12 lg:p-14 text-white">
             <p className="text-xs font-mono uppercase tracking-[0.2em] text-amber-400 mb-3">
-              Contractor, Estate &amp; Trade Supply
+              Trade &amp; Estate Supply
             </p>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl leading-tight mb-4 text-balance">
-              Complete electrical &amp; hardware supply for Nuwara Eliya &amp; island-wide sites
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl leading-tight mb-3 text-balance">
+              Electrical &amp; Hardware for Island-Wide Sites
             </h2>
             <p className="text-sm sm:text-base text-zinc-300 leading-relaxed mb-7">
-              Ready counter stock across brushless tool fleets, SLS 733 copper cables, TPN/SPN distribution boards, SLS 147 uPVC plumbing, water pumps, brass locks, and weather-shield paints across Thalawakale, Hatton, Nuwara Eliya, and island-wide.
+              Thalawakale counter stock across tools, SLS cables, DBs, uPVC plumbing, pumps &amp; paint.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <button

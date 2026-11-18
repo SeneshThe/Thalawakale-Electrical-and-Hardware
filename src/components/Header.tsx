@@ -43,7 +43,7 @@ export function Header({
             }}
             className="flex items-center gap-2 text-sm sm:text-base lg:text-lg font-display font-extrabold tracking-tight text-zinc-950 whitespace-nowrap min-w-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-500"
           >
-            <BrandLogo variant="light" size="sm" />
+            <BrandLogo variant="light" size="md" />
             <span className="truncate">Thalawakale Electrical &amp; Hardware</span>
           </a>
 

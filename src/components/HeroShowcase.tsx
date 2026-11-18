@@ -62,10 +62,10 @@ export function HeroShowcase({
   return (
     <section id="top" className="bg-white pt-5 pb-8 lg:pt-7 lg:pb-10 border-b border-zinc-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Bold Centered Display Headline matching reference template */}
+        {/* Bold Centered Display Headline */}
         <div className="text-center mb-4 lg:mb-6">
           <p className="text-xs font-mono uppercase tracking-[0.22em] text-zinc-500 mb-1.5">
-            Thalawakale · Nuwara Eliya · Island-Wide Hardware &amp; Electrical Supply
+            Thalawakale · Nuwara Eliya
           </p>
           <h1 className="font-display font-extrabold tracking-tight text-zinc-950 text-3xl sm:text-5xl lg:text-[54px] leading-[1.02] text-balance">
             {current.heroHeadline || 'POWER & HARDWARE'}
@@ -77,13 +77,13 @@ export function HeroShowcase({
           {/* Left Wing: Title, Price & Primary Cart Action */}
           <div className="lg:col-span-3 order-2 lg:order-1 flex flex-col items-start">
             <span className="text-xs font-mono text-zinc-500 mb-1.5">
-              {current.sku} · {current.categoryLabel}
+              {current.categoryLabel}
             </span>
             <h2 className="font-display font-bold text-2xl text-zinc-950 leading-snug mb-3 text-balance">
               {current.name}
             </h2>
 
-            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 mb-2">
+            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 mb-1.5">
               <span className="font-mono tabular-nums text-2xl font-bold text-zinc-950 whitespace-nowrap">
                 {formatCurrency(current.price)}
               </span>
@@ -95,8 +95,8 @@ export function HeroShowcase({
             </div>
 
             {savings > 0 && (
-              <p className="text-xs font-medium text-zinc-700 mb-5">
-                Save {formatCurrency(savings)} · Incl. 18% VAT · {current.compliance}
+              <p className="text-xs font-medium text-zinc-600 mb-5">
+                Save {formatCurrency(savings)} · Incl. 18% VAT
               </p>
             )}
 
@@ -153,17 +153,16 @@ export function HeroShowcase({
             </div>
           </div>
 
-          {/* Right Wing: Technical Specs & Detail Trigger */}
+          {/* Right Wing: Key Specs & Detail Trigger */}
           <div className="lg:col-span-3 order-3 flex flex-col items-start">
-            <p className="text-sm text-zinc-600 leading-relaxed mb-4">
-              {current.summary}
+            <p className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 mb-2">
+              Key Specifications
             </p>
-
             <dl className="w-full border-t border-zinc-200 divide-y divide-zinc-200 mb-5">
               {current.specs.slice(0, 3).map((spec) => (
                 <div
                   key={spec.label}
-                  className="py-2 flex items-center justify-between gap-4 text-xs"
+                  className="py-2.5 flex items-center justify-between gap-4 text-xs"
                 >
                   <dt className="text-zinc-500">{spec.label}</dt>
                   <dd className="font-mono tabular-nums font-semibold text-zinc-900 text-right">
